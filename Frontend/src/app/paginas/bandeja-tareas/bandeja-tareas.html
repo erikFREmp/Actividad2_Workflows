@@ -1,0 +1,124 @@
+<div class="pagina">
+  <header class="cabecera">
+    <div>
+      <span class="etiqueta-seccion">Bandeja personal</span>
+      <h1>Bandeja de tareas</h1>
+      <p>Tareas asignadas al rol activo: <strong>{{ usuario?.rol }}</strong></p>
+    </div>
+
+    <a routerLink="/dashboard" class="boton-secundario">Volver al dashboard</a>
+  </header>
+
+  <section *ngIf="cargando" class="mensaje">
+    Cargando tareas...
+  </section>
+
+  <section *ngIf="error" class="mensaje-error">
+    {{ error }}
+  </section>
+
+  <section *ngIf="mensaje" class="mensaje-ok">
+    {{ mensaje }}
+  </section>
+
+  <section class="lista-tareas" *ngIf="!cargando && !error">
+    <article class="tarjeta-tarea" *ngFor="let tarea of tareas">
+      <div class="encabezado-tarea">
+        <div>
+          <span class="mini-etiqueta">{{ tarea.workflow_nombre }}</span>
+          <h2>{{ tarea.nombre }}</h2>
+        </div>
+
+        <span class="estado" [class.completada]="tarea.estado === 'Completed'">
+          {{ tarea.estado }}
+        </span>
+      </div>
+
+      <p class="descripcion-tarea">
+        {{ tarea.descripcion || 'Sin descripción definida para esta tarea.' }}
+      </p>
+
+      <div class="datos">
+        <span><strong>Instancia:</strong> {{ tarea.instancia_id }}</span>
+        <span><strong>Rol asignado:</strong> {{ tarea.rol_asignado }}</span>
+        <span><strong>Creada:</strong> {{ tarea.fecha_creacion | date:'short' }}</span>
+      </div>
+
+      <div class="datos-previos" *ngIf="tarea.respuestas_previas && tarea.respuestas_previas.length > 0">
+        <div class="cabecera-datos-previos">
+          <span class="icono-info">i</span>
+          <div>
+            <strong>Información recibida</strong>
+            <p>Datos enviados en pasos anteriores de esta instancia.</p>
+          </div>
+        </div>
+
+        <div class="bloque-respuesta-previa" *ngFor="let item of tarea.respuestas_previas">
+          <div class="titulo-respuesta-previa">
+            <span>{{ item.tarea }}</span>
+            <small>{{ item.rol }}</small>
+          </div>
+
+          <div class="lista-campos-previos">
+            <div class="campo-previo" *ngFor="let dato of item.respuesta | keyvalue">
+              <span>{{ dato.key }}</span>
+              <strong>{{ dato.value }}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="formulario-json" *ngIf="tarea.datos_formulario && tarea.estado !== 'Completed'">
+        <div class="titulo-formulario">
+          <strong>Formulario dinámico</strong>
+          <span>{{ tarea.datos_formulario.campos.length }} campos</span>
+        </div>
+
+        <div class="campo-dinamico" *ngFor="let campo of tarea.datos_formulario.campos">
+          <label>
+            {{ campo.etiqueta }}
+            <span *ngIf="campo.requerido">*</span>
+          </label>
+
+          <input *ngIf="campo.tipo === 'texto'" type="text" [required]="campo.requerido"
+            [(ngModel)]="respuestasFormulario[tarea.id][campo.nombre]" />
+
+          <input *ngIf="campo.tipo === 'numero'" type="number" [required]="campo.requerido"
+            [(ngModel)]="respuestasFormulario[tarea.id][campo.nombre]" />
+
+          <input *ngIf="campo.tipo === 'fecha'" type="date" [required]="campo.requerido"
+            [(ngModel)]="respuestasFormulario[tarea.id][campo.nombre]" />
+
+          <textarea *ngIf="campo.tipo === 'textarea'" [required]="campo.requerido"
+            [(ngModel)]="respuestasFormulario[tarea.id][campo.nombre]"></textarea>
+
+          <select *ngIf="campo.tipo === 'select'" [required]="campo.requerido"
+            [(ngModel)]="respuestasFormulario[tarea.id][campo.nombre]">
+            <option value="">Selecciona una opción</option>
+            <option *ngFor="let opcion of campo.opciones" [value]="opcion">
+              {{ opcion }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="respuesta-registrada" *ngIf="tarea.respuesta">
+        <div class="cabecera-respuesta">
+          <strong>Respuesta registrada</strong>
+          <span>Tarea completada</span>
+        </div>
+
+        <div class="lista-respuesta">
+          <div class="campo-respuesta" *ngFor="let dato of tarea.respuesta | keyvalue">
+            <span>{{ dato.key }}</span>
+            <strong>{{ dato.value }}</strong>
+          </div>
+        </div>
+      </div>
+
+      <button class="boton-completar" *ngIf="tarea.estado !== 'Completed'" (click)="completarTarea(tarea)">
+        Completar tarea
+      </button>
+    </article>
+  </section>
+</div>

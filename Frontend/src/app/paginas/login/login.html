@@ -1,0 +1,38 @@
+<div class="pagina-login">
+
+  <div class="tarjeta-login">
+    <h1>Gestor de Workflows</h1>
+    <p class="subtitulo">Acceso a la plataforma de gestión de procesos</p>
+
+    <form class="formulario-login">
+      <label for="email">Correo electrónico</label>
+      <input id="email" name="email" type="email" placeholder="admin@workflow.com" [(ngModel)]="email" />
+
+      <label for="password">Contraseña</label>
+      <input id="password" name="password" type="password" placeholder="Introduce tu contraseña"
+        [(ngModel)]="password" />
+
+      <button type="button" (click)="iniciarSesion()">Iniciar sesión</button>
+
+      <p class="mensaje-error" *ngIf="mensajeError">
+        {{ mensajeError }}
+      </p>
+    </form>
+
+    <div class="texto-ayuda">
+      <strong>Usuarios de prueba</strong>
+
+      <p>
+        Admin: admin&#64;workflow.com / 123456
+      </p>
+
+      <p>
+        Diseñador: disenador&#64;workflow.com / 123456
+      </p>
+
+      <p>
+        Usuario: usuario&#64;workflow.com / 123456
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,84 @@
+<div class="pagina">
+  <header class="cabecera">
+    <div>
+      <span class="etiqueta-seccion">Catálogo de procesos</span>
+      <h1>Workflows</h1>
+      <p>Listado de procesos de negocio registrados en el sistema.</p>
+    </div>
+
+    <a routerLink="/dashboard" class="boton-secundario">Volver al dashboard</a>
+  </header>
+
+  <section *ngIf="cargando" class="mensaje">
+    Cargando workflows...
+  </section>
+
+  <section *ngIf="error" class="mensaje-error">
+    {{ error }}
+  </section>
+
+  <section *ngIf="mensaje" class="mensaje-ok">
+    {{ mensaje }}
+  </section>
+
+  <section class="lista-workflows" *ngIf="!cargando && !error">
+    <article class="tarjeta-workflow" *ngFor="let workflow of workflows">
+      <div class="cabecera-tarjeta">
+        <span class="workflow-id">ID {{ workflow.id }}</span>
+        <span class="chip">Proceso</span>
+      </div>
+
+      <h2>{{ workflow.nombre }}</h2>
+      <p>{{ workflow.descripcion || 'Workflow sin descripción.' }}</p>
+
+      <div class="datos">
+        <div>
+          <strong>{{ workflow.estructura?.nodos?.length || 0 }}</strong>
+          <span>Nodos</span>
+        </div>
+
+        <div>
+          <strong>{{ workflow.estructura?.enlaces?.length || 0 }}</strong>
+          <span>Enlaces</span>
+        </div>
+      </div>
+
+      <div class="creador">
+        <span>Creado por</span>
+        <strong>{{ workflow.creado_por_nombre || 'Sin asignar' }}</strong>
+      </div>
+
+      <button class="boton-iniciar" (click)="iniciarWorkflow(workflow.id)">
+        Iniciar proceso
+      </button>
+      <button class="boton-eliminar" *ngIf="usuario?.rol === 'Admin'" (click)="abrirModalEliminar(workflow)">
+        Eliminar workflow
+      </button>
+    </article>
+  </section>
+  <div class="fondo-modal" *ngIf="mostrarModalEliminar">
+    <div class="modal-eliminar">
+      <h2>Eliminar workflow</h2>
+
+      <p>
+        ¿Seguro que quieres eliminar el workflow
+        <strong>{{ workflowPendienteEliminar?.nombre }}</strong>?
+      </p>
+
+      <p class="aviso-modal">
+        También se eliminarán sus instancias y tareas asociadas.
+      </p>
+
+      <div class="acciones-modal">
+        <button class="boton-cancelar" (click)="cerrarModalEliminar()">
+          Cancelar
+        </button>
+
+        <button class="boton-confirmar-eliminar" (click)="confirmarEliminarWorkflow()">
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

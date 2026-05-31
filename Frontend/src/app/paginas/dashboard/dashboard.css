@@ -1,0 +1,255 @@
+.contenedor-dashboard {
+  min-height: 100vh;
+  display: flex;
+  font-family: Inter, Arial, sans-serif;
+  background:
+    radial-gradient(circle at top right, rgba(37, 99, 235, 0.14), transparent 28%),
+    #f8fafc;
+  color: #0f172a;
+}
+
+.menu-lateral {
+  width: 290px;
+  background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
+  color: white;
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-marca {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #2563eb, #60a5fa);
+  font-weight: 900;
+  font-size: 20px;
+}
+
+.marca h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.marca span {
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.usuario-card {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.usuario-card .etiqueta {
+  color: #93c5fd;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.usuario-card strong {
+  display: block;
+  margin-top: 8px;
+}
+
+.usuario-card p {
+  margin: 6px 0 0;
+  color: #cbd5e1;
+}
+
+.menu-lateral nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.menu-lateral a {
+  color: #e5e7eb;
+  text-decoration: none;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.menu-lateral a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.boton-salir {
+  margin-top: auto;
+  padding: 12px;
+  background: #fee2e2;
+  color: #991b1b;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.contenido-dashboard {
+  flex: 1;
+  padding: 46px;
+}
+
+.hero-dashboard {
+  max-width: 860px;
+}
+
+.etiqueta-seccion {
+  display: inline-block;
+  background: #dbeafe;
+  color: #1d4ed8;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 900;
+  margin-bottom: 12px;
+}
+
+.hero-dashboard h1 {
+  margin: 0;
+  font-size: 42px;
+  letter-spacing: -0.05em;
+  color: #0f172a;
+}
+
+.hero-dashboard p {
+  color: #64748b;
+  line-height: 1.7;
+  font-size: 16px;
+}
+
+.tarjetas-resumen {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  margin-top: 34px;
+}
+
+.tarjeta {
+  background: white;
+  border-radius: 22px;
+  padding: 24px;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+  border: 1px solid #e2e8f0;
+}
+
+.icono-tarjeta {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-weight: 900;
+  margin-bottom: 16px;
+}
+
+.tarjeta h3 {
+  margin: 0;
+  color: #0f172a;
+}
+
+.tarjeta p {
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.bloque-info {
+  margin-top: 28px;
+  background: #0f172a;
+  color: white;
+  padding: 28px;
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.18);
+}
+
+.bloque-info h2 {
+  margin-top: 0;
+}
+
+.pasos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.pasos div {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 16px;
+  border-radius: 16px;
+}
+
+.pasos strong {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  background: #2563eb;
+  border-radius: 999px;
+  margin-bottom: 10px;
+}
+
+.pasos span {
+  color: #e2e8f0;
+}
+
+@media (max-width: 900px) {
+  .contenedor-dashboard {
+    flex-direction: column;
+  }
+
+  .menu-lateral {
+    width: 100%;
+  }
+
+  .menu-lateral nav {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+
+  .boton-salir {
+    margin-top: 0;
+  }
+
+  .contenido-dashboard {
+    padding: 28px;
+  }
+
+  .tarjetas-resumen,
+  .pasos {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-dashboard h1 {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 520px) {
+  .contenido-dashboard {
+    padding: 18px;
+  }
+
+  .menu-lateral {
+    padding: 20px;
+  }
+
+  .tarjeta,
+  .bloque-info {
+    padding: 18px;
+  }
+}

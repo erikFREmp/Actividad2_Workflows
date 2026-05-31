@@ -1,0 +1,94 @@
+<div class="pagina">
+  <header class="cabecera">
+    <div>
+      <span class="etiqueta-seccion">Seguimiento</span>
+      <h1>Monitor de procesos</h1>
+      <p>Estado de ejecución de las instancias generadas a partir de los workflows.</p>
+    </div>
+
+    <a routerLink="/dashboard" class="boton-secundario">Volver al dashboard</a>
+  </header>
+
+  <section *ngIf="cargando" class="mensaje">
+    Cargando instancias...
+  </section>
+
+  <section *ngIf="error" class="mensaje-error">
+    {{ error }}
+  </section>
+
+  <section *ngIf="mensaje" class="mensaje-ok">
+    {{ mensaje }}
+  </section>
+
+  <section class="tabla-contenedor" *ngIf="!cargando && !error">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Workflow</th>
+          <th>Estado</th>
+          <th>Nodo actual</th>
+          <th>Fecha inicio</th>
+          <th>Fecha fin</th>
+          <th *ngIf="usuario?.rol === 'Admin'">Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let instancia of instancias">
+          <td>
+            <span class="id-instancia">#{{ instancia.id }}</span>
+          </td>
+
+          <td>
+            <strong>{{ instancia.workflow_nombre }}</strong>
+          </td>
+
+          <td>
+            <span class="estado" [class.completada]="instancia.estado === 'Completed'"
+              [class.progreso]="instancia.estado === 'In Progress'">
+              {{ instancia.estado }}
+            </span>
+          </td>
+
+          <td>{{ instancia.nodo_actual }}</td>
+          <td>{{ instancia.fecha_inicio | date:'short' }}</td>
+          <td>{{ instancia.fecha_fin ? (instancia.fecha_fin | date:'short') : 'Pendiente' }}</td>
+          <td *ngIf="usuario?.rol === 'Admin'">
+            <button class="boton-eliminar" (click)="abrirModalEliminar(instancia)">
+              Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div class="fondo-modal" *ngIf="mostrarModalEliminar">
+    <div class="modal-eliminar">
+      <h2>Eliminar instancia</h2>
+
+      <p>
+        ¿Seguro que quieres eliminar la instancia
+        <strong>#{{ instanciaPendienteEliminar?.id }}</strong>
+        del workflow
+        <strong>{{ instanciaPendienteEliminar?.workflow_nombre }}</strong>?
+      </p>
+
+      <p class="aviso-modal">
+        También se eliminarán las tareas asociadas a esta instancia.
+      </p>
+
+      <div class="acciones-modal">
+        <button class="boton-cancelar" (click)="cerrarModalEliminar()">
+          Cancelar
+        </button>
+
+        <button class="boton-confirmar-eliminar" (click)="confirmarEliminarInstancia()">
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

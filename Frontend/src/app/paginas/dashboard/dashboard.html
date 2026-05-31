@@ -1,0 +1,91 @@
+<div class="contenedor-dashboard">
+  <aside class="menu-lateral">
+    <div class="marca">
+      <div class="logo-marca">W</div>
+      <div>
+        <h2>WorkflowHub</h2>
+        <span>Gestión BPM</span>
+      </div>
+    </div>
+
+    <div class="usuario-card">
+      <span class="etiqueta">Sesión activa</span>
+      <strong>{{ usuario?.nombre || 'Usuario' }}</strong>
+    </div>
+
+    <nav>
+      <a routerLink="/dashboard">Panel principal</a>
+
+      <a routerLink="/workflows" *ngIf="usuario?.rol === 'Admin' || usuario?.rol === 'Diseñador'">
+        Workflows
+      </a>
+
+      <a routerLink="/editor-workflows" *ngIf="usuario?.rol === 'Admin' || usuario?.rol === 'Diseñador'">
+        Editor visual
+      </a>
+
+      <a routerLink="/bandeja-tareas" *ngIf="usuario?.rol === 'Admin' || usuario?.rol === 'Usuario'">
+        Bandeja de tareas
+      </a>
+
+      <a routerLink="/monitor-procesos" *ngIf="usuario?.rol === 'Admin' || usuario?.rol === 'Diseñador'">
+        Monitor de procesos
+      </a>
+    </nav>
+
+    <button class="boton-salir" (click)="cerrarSesion()">Cerrar sesión</button>
+  </aside>
+
+  <main class="contenido-dashboard">
+    <section class="hero-dashboard">
+      <span class="etiqueta-seccion">Panel de control</span>
+      <h1>Gestión de procesos empresariales</h1>
+      <p>
+        Plataforma para modelar workflows, iniciar instancias, asignar tareas por rol
+        y monitorizar la ejecución de procesos.
+      </p>
+    </section>
+
+    <section class="tarjetas-resumen">
+      <div class="tarjeta">
+        <span class="icono-tarjeta">W</span>
+        <h3>Workflows</h3>
+        <p>Consulta procesos registrados e inicia nuevas instancias desde la plataforma.</p>
+      </div>
+
+      <div class="tarjeta">
+        <span class="icono-tarjeta">✓</span>
+        <h3>Tareas</h3>
+        <p>Accede a tareas pendientes según el rol del usuario autenticado.</p>
+      </div>
+
+      <div class="tarjeta">
+        <span class="icono-tarjeta">●</span>
+        <h3>Monitorización</h3>
+        <p>Supervisa el estado de las instancias y el nodo actual de cada proceso.</p>
+      </div>
+    </section>
+
+    <section class="bloque-info">
+      <h2>Flujo principal de la aplicación</h2>
+      <div class="pasos">
+        <div>
+          <strong>1</strong>
+          <span>Diseñar workflow</span>
+        </div>
+        <div>
+          <strong>2</strong>
+          <span>Iniciar proceso</span>
+        </div>
+        <div>
+          <strong>3</strong>
+          <span>Completar tareas</span>
+        </div>
+        <div>
+          <strong>4</strong>
+          <span>Monitorizar estado</span>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>

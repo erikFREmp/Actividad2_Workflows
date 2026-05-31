@@ -1,0 +1,167 @@
+<div class="pagina-editor">
+  <header class="cabecera-editor">
+    <div>
+      <span class="etiqueta-seccion">Modelador BPM</span>
+      <h1>Editor visual de workflows</h1>
+      <p>Diseña procesos de negocio mediante nodos reordenables con drag & drop.</p>
+    </div>
+
+    <a routerLink="/dashboard" class="boton-secundario">Volver al dashboard</a>
+  </header>
+
+  <section class="datos-workflow">
+    <label>
+      Nombre del workflow
+      <input type="text" [(ngModel)]="nombreWorkflow" />
+    </label>
+
+    <label>
+      Descripción
+      <input type="text" [(ngModel)]="descripcionWorkflow" />
+    </label>
+
+    <button (click)="guardarWorkflow()">Guardar workflow</button>
+  </section>
+
+  <section class="editor">
+    <aside class="panel-componentes">
+      <h2>Componentes</h2>
+      <p>Añade nodos al proceso y ordénalos en el canvas.</p>
+
+      <button (click)="agregarNodo('inicio')">+ Nodo inicio</button>
+      <button (click)="agregarNodo('tarea')">+ Nodo tarea</button>
+      <button (click)="agregarNodo('decision')">+ Nodo decisión</button>
+      <button (click)="agregarNodo('fin')">+ Nodo fin</button>
+      <hr />
+      <button class="boton-plantilla" (click)="crearPlantillaVacaciones()">
+        Usar plantilla: Vacaciones
+      </button>
+    </aside>
+
+    <main class="canvas-editor">
+      <div class="titulo-canvas">
+        <div>
+          <h2>Canvas del proceso</h2>
+          <p>Arrastra los nodos para cambiar el orden de ejecución.</p>
+        </div>
+      </div>
+
+      <div class="zona-nodos" cdkDropList [cdkDropListData]="nodos" (cdkDropListDropped)="moverNodo($event)">
+        <div class="nodo" *ngFor="let nodo of nodos; let i = index" cdkDrag
+          [class.seleccionado]="nodoSeleccionado === nodo" [class.inicio]="nodo.tipo === 'inicio'"
+          [class.tarea]="nodo.tipo === 'tarea'" [class.decision]="nodo.tipo === 'decision'"
+          [class.fin]="nodo.tipo === 'fin'" (click)="seleccionarNodo(nodo)">
+          <div class="cabecera-nodo">
+            <span class="numero-nodo">{{ i + 1 }}</span>
+            <span class="tipo">{{ nodo.tipo }}</span>
+          </div>
+
+          <strong>{{ nodo.nombre }}</strong>
+
+          <small *ngIf="nodo.tipo === 'tarea'">
+            Rol: {{ nodo.rolAsignado }}
+          </small>
+        </div>
+      </div>
+
+      <p class="ayuda-canvas" *ngIf="nodos.length === 0">
+        Añade nodos desde el panel izquierdo para construir el workflow.
+      </p>
+    </main>
+
+    <aside class="panel-propiedades">
+      <h2>Propiedades</h2>
+
+      <div *ngIf="nodoSeleccionado; else sinNodo">
+        <label>
+          ID
+          <input type="text" [(ngModel)]="nodoSeleccionado.id" readonly/>
+        </label>
+
+        <label>
+          Nombre
+          <input type="text" [(ngModel)]="nodoSeleccionado.nombre" />
+        </label>
+
+        <label>
+          Descripción
+          <textarea [(ngModel)]="nodoSeleccionado.descripcion"></textarea>
+        </label>
+
+        <label *ngIf="nodoSeleccionado.tipo === 'tarea'">
+          Rol asignado
+          <select [(ngModel)]="nodoSeleccionado.rolAsignado">
+            <option value="Admin">Admin</option>
+            <option value="Diseñador">Diseñador</option>
+            <option value="Usuario">Usuario</option>
+          </select>
+        </label>
+        <div class="editor-formulario" *ngIf="nodoSeleccionado.tipo === 'tarea'">
+          <div class="cabecera-formulario">
+            <h3>Formulario dinámico</h3>
+            <button type="button" (click)="agregarCampoFormulario()">
+              + Añadir campo
+            </button>
+          </div>
+
+          <p class="texto-ayuda-formulario" *ngIf="nodoSeleccionado.formulario?.campos?.length === 0">
+            Esta tarea todavía no tiene campos. Añade los campos que necesites para este formulario.
+          </p>
+
+          <div class="campo-formulario-editor" *ngFor="let campo of nodoSeleccionado.formulario?.campos; let i = index">
+            <div class="cabecera-campo">
+              <strong>Campo {{ i + 1 }}</strong>
+              <button type="button" (click)="eliminarCampoFormulario(i)">
+                Eliminar
+              </button>
+            </div>
+
+            <label>
+              Nombre interno
+              <input type="text" [(ngModel)]="campo.nombre" readonly />
+            </label>
+
+            <label>
+              Etiqueta visible
+              <input type="text" [(ngModel)]="campo.etiqueta" />
+            </label>
+
+            <label>
+              Tipo de campo
+              <select [(ngModel)]="campo.tipo">
+                <option value="texto">Texto</option>
+                <option value="numero">Número</option>
+                <option value="fecha">Fecha</option>
+                <option value="textarea">Área de texto</option>
+                <option value="select">Selector</option>
+              </select>
+            </label>
+
+            <label class="checkbox-campo">
+              <input type="checkbox" [(ngModel)]="campo.requerido" />
+              Campo obligatorio
+            </label>
+
+            <label *ngIf="campo.tipo === 'select'">
+              Opciones del selector
+              <input type="text" placeholder="Aprobada, Rechazada, Pendiente"
+                (input)="actualizarOpcionesCampo(campo, $any($event.target).value)" />
+            </label>
+          </div>
+        </div>
+        <button class="boton-eliminar" (click)="eliminarNodo(nodoSeleccionado)">
+          Eliminar nodo
+        </button>
+      </div>
+
+      <ng-template #sinNodo>
+        <p class="texto-vacio">Selecciona un nodo para editar sus propiedades.</p>
+      </ng-template>
+    </aside>
+  </section>
+
+  <section class="mensajes">
+    <p class="mensaje-ok" *ngIf="mensaje">{{ mensaje }}</p>
+    <p class="mensaje-error" *ngIf="error">{{ error }}</p>
+  </section>
+</div>
